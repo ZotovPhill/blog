@@ -319,5 +319,6 @@ fabric.properties
 certs
 .idea
 shared-files
+.env.*
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django,pycharm
