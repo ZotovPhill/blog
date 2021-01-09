@@ -1,0 +1,89 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:12.3-alpine
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env.dev.db
+    restart: on-failure
+    volumes:
+      - /shared-files/database/dump:/var/dump
+      - /shared-files/database/postgresql:/var/lib/postgresql/data:delegated
+
+  redis:
+    image: redis:alpine
+
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - "5672:5672"
+    restart: on-failure
+
+  web:
+    build:
+      context: ..
+      dockerfile: ./system/01-python/Dockerfile
+    command: bash -c "
+      python manage.py collectstatic --no-input
+      && gunicorn api.wsgi:application --workers 3 --bind 0.0.0.0:8000
+        --reload --chdir /usr/src/var/logs/gunicorn
+        --log-level=info
+        --log-file=./gunicorn.log
+        --access-logfile=./gunicorn-access.log
+      "
+    ports:
+      - 8000:8000
+    expose:
+      - "8000"
+    env_file:
+      - ../api/.env.dev
+    depends_on:
+      - db
+      - redis
+    restart: on-failure
+    volumes:
+      - /api/static:/usr/src/api/static
+      - /api/media:/usr/src/api/media
+      - /shared-files/logs/django:/usr/src/var/logs/django
+      - /shared-files/logs/gunicorn:/usr/src/var/logs/gunicorn
+
+  nginx:
+    build: ./02-nginx/
+    ports:
+      - "443:443"
+    depends_on:
+      - web
+    restart: on-failure
+    volumes:
+      - ../api/static:/usr/src/api/static
+      - ../api/media:/usr/src/api/media
+      - /shared-files/logs/nginx:/usr/src/var/logs/nginx
+
+  celery_worker:
+    build:
+      context: ..
+      dockerfile: ./system/01-python/Dockerfile
+    command: sh -c "wait-for rabbitmq:5672 && wait-for web:8000 -- celery -A mysite worker -l info"
+    depends_on:
+      - web
+      - db
+      - rabbitmq
+      - redis
+    restart: on-failure
+    volumes:
+      - ../api:/usr/src/api
+
+  celery_beat:
+    build:
+      context: ..
+      dockerfile: ./system/01-python/Dockerfile
+    command: sh -c "wait-for rabbitmq:5672 && wait-for web:8000 -- celery -A mysite beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    depends_on:
+      - web
+      - db
+      - rabbitmq
+      - redis
+    restart: on-failure
+    volumes:
+      - ../api:/usr/src/api
