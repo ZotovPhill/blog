@@ -26,16 +26,15 @@ services:
       dockerfile: ./system/01-python/Dockerfile
     command: bash -c "
       python manage.py collectstatic --no-input
-      && gunicorn api.wsgi:application --workers 3 --bind 0.0.0.0:8000
+      && gunicorn api.wsgi:application --workers 5 --bind 0.0.0.0:8000
         --reload --chdir /usr/src/var/logs/gunicorn
         --log-level=info
         --log-file=./gunicorn.log
-        --access-logfile=./gunicorn-access.log
-      "
+        --access-logfile=./gunicorn-access.log"
     ports:
       - 8000:8000
     expose:
-      - "8000"
+      - 8000
     env_file:
       - ../api/.env.dev
     depends_on:
@@ -48,10 +47,27 @@ services:
       - /shared-files/logs/django:/usr/src/var/logs/django
       - /shared-files/logs/gunicorn:/usr/src/var/logs/gunicorn
 
-  nginx:
-    build: ./02-nginx/
+  frontend:
+    build:
+      context: ..
+      dockerfile: ./system/03-node/Dockerfile
     ports:
-      - "443:443"
+      - 8080:8080
+    expose:
+      - 8080
+    env_file:
+      - ../frontend/.env.dev
+    restart: on-failure
+    volumes:
+      - ../frontend/node_modules:/usr/src/node_modules
+      - ../frontend:/usr/src/frontend
+
+  nginx:
+    build:
+      context: ..
+      dockerfile: ./system/02-nginx/Dockerfile
+    ports:
+      - 443:443
     depends_on:
       - web
     restart: on-failure
@@ -64,7 +80,14 @@ services:
     build:
       context: ..
       dockerfile: ./system/01-python/Dockerfile
-    command: sh -c "wait-for rabbitmq:5672 && wait-for web:8000 -- celery -A mysite worker -l info"
+    command:
+      - /bin/sh
+      - -c
+      - |
+        /usr/src/system/wait-for.sh rabbitmq:5672
+        /usr/src/system/wait-for.sh web:8000 -- celery -A api worker -l info
+    env_file:
+      - ../api/.env.dev
     depends_on:
       - web
       - db
@@ -78,7 +101,14 @@ services:
     build:
       context: ..
       dockerfile: ./system/01-python/Dockerfile
-    command: sh -c "wait-for rabbitmq:5672 && wait-for web:8000 -- celery -A mysite beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    command:
+      - /bin/sh
+      - -c
+      - |
+        /usr/src/system/wait-for.sh rabbitmq:5672
+        /usr/src/system/wait-for.sh web:8000 -- celery -A api beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file:
+      - ../api/.env.dev
     depends_on:
       - web
       - db

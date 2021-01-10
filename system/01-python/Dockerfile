@@ -9,7 +9,7 @@ WORKDIR /usr/src/
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install psycopg2 dependencies
+# install python dependencies
 RUN apk update \
     && apk add --virtual build-dependencies build-base gcc wget git \
     && apk add postgresql-dev python3-dev musl-dev
@@ -52,6 +52,8 @@ RUN pip install --no-cache ./system/wheels/*
 
 # copy entrypoint.sh
 COPY /system/01-python/entrypoint.sh ./system/
+COPY /system/wait-for.sh ./system/
+RUN chmod +x ./system/wait-for.sh
 
 COPY /api ./api
 

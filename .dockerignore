@@ -1,4 +1,10 @@
 .idea
-venv
 shared-files
-.env*
+tmp/*
+log/*
+Dockerfile
+*docker-compose.yml
+**/.git
+**/node_modules
+**/dist
+buildkite-script-*
