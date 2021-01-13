@@ -42,8 +42,8 @@ services:
       - redis
     restart: on-failure
     volumes:
-      - /api/static:/usr/src/api/static
-      - /api/media:/usr/src/api/media
+      - ../api/static:/usr/src/api/static
+      - ../api/media:/usr/src/api/media
       - /shared-files/logs/django:/usr/src/var/logs/django
       - /shared-files/logs/gunicorn:/usr/src/var/logs/gunicorn
 
@@ -53,28 +53,28 @@ services:
       dockerfile: ./system/03-node/Dockerfile
     ports:
       - 8080:8080
-    expose:
-      - 8080
+      - 443:443
     env_file:
       - ../frontend/.env.dev
     restart: on-failure
     volumes:
       - ../frontend/node_modules:/usr/src/node_modules
       - ../frontend:/usr/src/frontend
-
-  nginx:
-    build:
-      context: ..
-      dockerfile: ./system/02-nginx/Dockerfile
-    ports:
-      - 443:443
-    depends_on:
-      - web
-    restart: on-failure
-    volumes:
       - ../api/static:/usr/src/api/static
       - ../api/media:/usr/src/api/media
       - /shared-files/logs/nginx:/usr/src/var/logs/nginx
+
+
+  #  nginx:
+#    build:
+#      context: ..
+#      dockerfile: ./system/02-nginx/Dockerfile
+#    ports:
+#      - 443:443
+#    depends_on:
+#      - web
+#    restart: on-failure
+#    volumes:
 
   celery_worker:
     build:
