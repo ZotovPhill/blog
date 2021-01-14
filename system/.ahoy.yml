@@ -1,0 +1,58 @@
+ahoyapi: v2
+
+commands:
+  up:
+      cmd: "docker-compose up -d"
+      usage: Create and run docker services.
+
+  build:
+    cmd: "docker-compose build"
+    usage: Build
+
+  rebuild:
+    cmd: "docker-compose up -d --build"
+    usage: Rebuild containers
+
+  ps:
+    cmd: "docker-compose ps $@"
+    usage: List the running docker-compose containers.
+
+  start:
+    cmd: "docker-compose start $@"
+    usage: Start the docker-compose containers.
+
+  stop:
+    cmd: "docker-compose stop $@"
+    usage: Stop the docker-compose containers.
+
+  down:
+      cmd: "docker-compose down -v $@"
+      usage: Stop the docker-compose containers.
+
+  restart:
+    cmd: "docker-compose restart $@"
+    usage: Restart the docker-compose containers.
+
+  sh_web:
+    cmd: "docker exec -it $(docker-compose ps -q web) /bin/sh"
+    usage: Start a shell in the container (like ssh without actual ssh).
+
+  sh_frontend:
+    cmd: "docker exec -it $(docker-compose ps -q frontend) /bin/sh"
+    usage: Start a shell in the container (like ssh without actual ssh).
+
+  logs:
+    cmd: "docker-compose logs $@"
+    usage: Start a shell in the container (like ssh without actual ssh).
+
+  makemigrations:
+    cmd: "docker exec -it $(docker-compose ps -q web) python manage.py makemigrations"
+    usage: Make migration for current application 'blank_api'
+
+  migrate:
+    cmd: "docker exec -it $(docker-compose ps -q web) python manage.py migrate"
+    usage: Synchronizes the database state with the current set of models and migrations.
+
+  console:
+    cmd: "docker exec -it $(docker-compose ps -q web) python manage.py $@"
+    usage: Make migration for current application 'blank_api'

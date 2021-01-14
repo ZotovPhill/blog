@@ -1,0 +1,12 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+# Created by https://www.toptal.com/developers/gitignore/api/python,django,pycharm
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,django,pycharm
+
+# Environment
+certs
+.idea
+shared-files
+.env.*
+
+# End of https://www.toptal.com/developers/gitignore/api/python,django,pycharm
