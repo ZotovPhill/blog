@@ -117,3 +117,17 @@ services:
     restart: on-failure
     volumes:
       - ../api:/usr/src/api
+
+  dashboard:
+    build:
+      context: ..
+      dockerfile: ./system/01-python/Dockerfile
+    command:  flower -A api --port=5555 --broker=amqp://rabbitmq:5672
+    ports:
+      - 5555:5555
+    env_file:
+      - ../api/.env.dev
+    depends_on:
+      - web
+      - redis
+      - celery_worker

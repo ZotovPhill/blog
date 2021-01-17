@@ -5,39 +5,31 @@ gunicorn==20.0.4
 asgiref==3.2.10
 
 # DB
-psycopg2-binary==2.8.5
+psycopg2==2.8.5
 sqlparse==0.3.1
 factory-boy==3.1.0
 
 # Rest apis
-django-filter==1.1.0
-django-rest-auth==0.9.5
 djangorestframework==3.11.0
-djangorestframework-filters==0.11.1
-djangorestframework-simplejwt==4.6.0
 django-extensions==3.1.0
+djangorestframework-simplejwt==4.6.0
+django-rest-auth==0.9.5
 PyJWT==1.7.1
+django-filter==1.1.0
+djangorestframework-filters==0.11.1
 
 # Developer Tools
-ipdb==0.13.4
 ipython==7.18.1
-mkdocs==1.1.2
 flake8==3.8.4
 drf-yasg==1.20.0
 
-# Markup
-Jinja2==2.11.2
-MarkupSafe==1.1.1
-
 # Request
 requests==2.24.0
-urllib3==1.25.11
 
 # Messenger
-amqp==2.3.2
-billiard==3.5.0.4
-celery==4.2.1
+amqp==2.6.1
+celery==4.4.0
 django-celery-beat==1.1.1
 django-celery-results==1.0.1
-kombu==4.2.1
-vine==1.1.4
+flower==0.9.7
+redis==3.4.1
