@@ -11,8 +11,7 @@ ENV PYTHONUNBUFFERED 1
 
 # install python dependencies
 RUN apk update \
-    && apk add --virtual build-dependencies build-base gcc wget git \
-    && apk add postgresql-dev python3-dev musl-dev
+    && apk add --no-cache --virtual build-dependencies gcc postgresql-dev python3-dev musl-dev
 
 # install dependencies
 RUN pip install --upgrade pip
@@ -35,15 +34,8 @@ WORKDIR /usr/src/
 
 RUN mkdir ./system
 
-# install dependecies
-RUN apk update \
-    && apk add --virtual build-dependencies build-base gcc wget git libpq
-RUN apk add --update --no-cache \
-    make \
-    curl \
-    nano \
-    mc \
-    bash
+## install dependecies
+RUN apk add --update --no-cache libpq make curl nano mc bash
 
 COPY --from=builder /usr/src/system/wheels ./system/wheels
 COPY --from=builder /usr/src/system/requirements.txt ./system
