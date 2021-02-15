@@ -10,6 +10,9 @@ class Role(BaseModel):
     code = models.CharField(verbose_name=_('code'), max_length=255)
     abilities = models.ManyToManyField(Ability)
 
+    class Meta:
+        db_table = 'acl_role'
+
     def has_ability(self):
         pass
 

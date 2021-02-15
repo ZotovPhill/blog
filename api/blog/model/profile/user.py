@@ -42,6 +42,9 @@ class User(AbstractBaseUser):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     is_admin = models.BooleanField(default=False)
 
+    class Meta:
+        db_table = 'pa_user'
+
     objects = UserManager()
 
     EMAIL_FIELD = 'email'

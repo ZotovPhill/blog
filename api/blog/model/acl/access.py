@@ -10,3 +10,6 @@ class Access(BaseModel):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'acl_access'

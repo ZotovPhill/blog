@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
 from blog.model.base_model import BaseModel
+from blog.model.file.file import File
 from blog.model.profile.user import User
 
 
@@ -23,7 +24,6 @@ class Profile(BaseModel):
     )
     first_name = models.CharField(verbose_name=_('first name'), max_length=255, blank=True)
     last_name = models.CharField(verbose_name=_('last name'), max_length=255, blank=True)
-
     slug = models.SlugField(
         verbose_name=_('slug'),
         allow_unicode=True,
@@ -31,13 +31,16 @@ class Profile(BaseModel):
         help_text=_("The name of the page as it will appear in URLs e.g http://domain.com/profile/[my-slug]/")
     )
     photo = models.OneToOneField(
-        'File',
+        File,
         verbose_name=_('photo'),
         null=True,
         blank=True,
         editable=True,
         on_delete=models.SET_NULL,
     )
+
+    class Meta:
+        db_table = 'pa_profile'
 
     def save(self, *args, **kwargs):
         """

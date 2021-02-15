@@ -24,6 +24,9 @@ class Blog(BaseModel):
 
     _password = None
 
+    class Meta:
+        db_table = 'blg_blog'
+
     def set_password(self, raw_password):
         if (timezone.now() - self.last_modified).days < 1:
             raise ValidationError
