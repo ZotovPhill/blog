@@ -6,6 +6,8 @@ from django.contrib.auth.models import (
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from blog.models.acl.role import Role
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -27,20 +29,18 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.EmailField(
-        verbose_name=_('email address'),
         max_length=255,
         unique=True,
     )
     is_active = models.BooleanField(
-        verbose_name=_('active'),
         default=True,
         help_text=_(
             'Designates whether this user should be treated as active. '
             'Unselect this instead of deleting accounts.'
         ),
     )
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-    is_admin = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=timezone.now)
+    roles = models.ManyToManyField(Role)
 
     class Meta:
         db_table = 'pa_user'
@@ -52,10 +52,6 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.email
-
-    @property
-    def is_staff(self):
-        return self.is_admin
 
     def clean(self):
         super().clean()

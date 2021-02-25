@@ -5,22 +5,21 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.text import slugify
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.hashers import (
     check_password,
     make_password,
 )
 
-from blog.model.base_model import BaseModel
+from blog.models.base_model import BaseModel
 
 
 class Blog(BaseModel):
-    title = models.CharField(verbose_name=_('title'), max_length=255, null=False)
-    slug = models.SlugField(verbose_name=_('slug'), max_length=255, default=slugify(title), unique=True)
-    is_private = models.BooleanField(verbose_name=_('is_private'), default=False)
-    password = models.CharField(_('password'), max_length=128, null=True)
-    last_modified = models.DateTimeField(verbose_name=_('last_modified'))
-    last_access = models.DateTimeField(verbose_name=_('last_access'))
+    title = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, default=slugify(title), unique=True)
+    is_private = models.BooleanField(default=False, serialize=False)
+    password = models.CharField(max_length=128, null=True, serialize=False)
+    last_modified = models.DateTimeField()
+    last_access = models.DateTimeField()
 
     _password = None
 

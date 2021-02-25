@@ -5,15 +5,14 @@ from django.dispatch import receiver
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
-from blog.model.base_model import BaseModel
-from blog.model.file.file import File
-from blog.model.profile.user import User
+from blog.models.base_model import BaseModel
+from blog.models.file.file import File
+from blog.models.profile.user import User
 
 
 class Profile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     username = models.CharField(
-        verbose_name=_('username'),
         max_length=255,
         unique=True,
         help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
@@ -22,17 +21,15 @@ class Profile(BaseModel):
             'unique': _("A user with that username already exists."),
         },
     )
-    first_name = models.CharField(verbose_name=_('first name'), max_length=255, blank=True)
-    last_name = models.CharField(verbose_name=_('last name'), max_length=255, blank=True)
+    first_name = models.CharField(max_length=255, blank=True)
+    last_name = models.CharField(max_length=255, blank=True)
     slug = models.SlugField(
-        verbose_name=_('slug'),
         allow_unicode=True,
         max_length=255,
         help_text=_("The name of the page as it will appear in URLs e.g http://domain.com/profile/[my-slug]/")
     )
     photo = models.OneToOneField(
         File,
-        verbose_name=_('photo'),
         null=True,
         blank=True,
         editable=True,
@@ -73,5 +70,3 @@ def save_user_profile(sender, instance, **kwargs):
     Hooking User model method. Call on User model update.
     """
     instance.profile.save()
-
-

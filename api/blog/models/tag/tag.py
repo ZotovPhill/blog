@@ -1,13 +1,12 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from blog.model.base_model import BaseModel
+from blog.models.base_model import BaseModel
 
 
 class Tag(BaseModel):
-    name = models.CharField(verbose_name=_('name'), max_length=255, unique=True, blank=False)
+    name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(
-        verbose_name=_('slug'),
         allow_unicode=True,
         unique=True,
         max_length=255,
