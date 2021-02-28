@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, connection
 
 
 class BaseModel(models.Model):
@@ -18,3 +18,8 @@ class BaseModel(models.Model):
             if not attr.startswith('__') and not attr.endswith('__'):
                 result += f"\t{attr} = {getattr(self, attr)}\n"
         return result
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))

@@ -1,0 +1,9 @@
+fixtures:
+  base_dir: blog.fixtures
+  load:
+    Role:
+      module: load_1_ability
+      class: LoadAbility
+      attributes:
+        catalog: False
+        quantity: 3
