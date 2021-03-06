@@ -53,8 +53,8 @@ commands:
     cmd: "docker exec -it $(docker-compose ps -q web) python manage.py migrate"
     usage: Synchronizes the database state with the current set of models and migrations.
 
-  migrate_zero:
-    cmd: "docker exec -it $(docker-compose ps -q web) python manage.py migrate blog zero"
+  flush:
+    cmd: "docker exec -it $(docker-compose ps -q web) python manage.py flush --no-input"
     usage: Synchronizes the database state with the current set of models and migrations.
 
   fixtures:
@@ -68,9 +68,9 @@ commands:
   db:rebuild:
     usage: Unapplying all migration with erasing all data and load fixtures
     cmd: |
-      echo "Unapply all migrations: blog"
-      ahoy migrate_zero
-      echo "Apply migrations"
+      echo -e "\033[0;35mUnapply all migrations: blog"
+      ahoy flush
+      echo -e "\n\033[0;35mApply migrations"
       ahoy migrate
-      echo "Load fixtures"
+      echo -e "\n\033[0;35mLoad fixtures"
       ahoy fixtures

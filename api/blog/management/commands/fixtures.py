@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import tracemalloc
 import textwrap
@@ -9,12 +10,13 @@ from django.core.management.base import BaseCommand, CommandError
 from django.apps import apps
 from django.db import transaction
 from django.conf import settings
-from factory.django import DjangoModelFactory
 
 
 class Command(BaseCommand):
     help = "Load fixtures of given model (by default load fixtures of all models)"
     requires_migrations_checks = True
+
+    successful_load = 0
 
     def add_arguments(self, parser):
         # parser.add_argument('-d', '--drop', nargs='*')
@@ -23,47 +25,39 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         question = input(self.style.HTTP_NOT_MODIFIED(textwrap.fill(
             "This command will drop all your data and generate new "
-            "fixtures. Would you like to continue? (yes / no) ", 55
+            "fixtures. Would you like to continue? (yes / no): ", 55
         )))
-        if question.lower() == "no":
+        if not re.search('(y|yes)', question.lower()):
             sys.exit()
 
         # Load models that presented in config file fixtures.yaml
-        load_models = self.load_models_from_config()
-
-        # WARNING. Clear all tables.
-        models_klass = [model['class']._meta.model for model in load_models.values()]
-        self._truncate_db(models_klass)
+        load_fixtures = self.load_fixtures_from_config()
 
         tracemalloc.start()
 
-        for model in load_models.values():
-            self._fill_db(model['class'], model['attributes'])
+        for fixture in load_fixtures.values():
+            self._fill_db(fixture['class'], fixture['attributes'])
 
         current, peak = tracemalloc.get_traced_memory()
-        self.stdout.write(self.style.SUCCESS(f"\nSuccessfully loaded all {len(load_models)} fixtures!"))
+        self.stdout.write(self.style.SUCCESS(f"\nSuccessfully loaded {self.successful_load} fixtures!"))
         self.stdout.write(
             self.style.HTTP_SUCCESS(f"Current memory usage: {current / 10 ** 3} KB; Peak usage: {peak / 10 ** 3} KB")
         )
 
-    def _truncate_db(self, models: list) -> None:
-        for model in models:
-            model.truncate()
-        self.stdout.write(self.style.SUCCESS("Successfully deleted data from tables!\n"))
-
     @transaction.atomic
-    def _fill_db(self, model: DjangoModelFactory, attrs: dict) -> None:
+    def _fill_db(self, fixture, attrs: dict) -> None:
         try:
-            if 'catalog' not in attrs.keys() or not attrs['catalog']:
-                model.create_batch(attrs.get('quantity', 100))
-            else:
-                model.create()
+            obj = fixture()
+            if settings.ENVIRONMENT not in obj.env_group():
+                return
+            obj.load(attrs.get('quantity', None), attrs.get('catalog', False))
+            self.successful_load += 1
         except Exception as e:
-            self.stderr.write(f"Error processing {model} fixture: \n {e}")
-        self.stdout.write(self.style.SUCCESS(f"{model.__name__.capitalize()} fixtures loaded successfully"))
+            self.stderr.write(f"Error processing {fixture.__name__} fixture: \n {e}")
+        self.stdout.write(self.style.SUCCESS(f"{fixture.__name__} fixtures loaded successfully"))
 
     @staticmethod
-    def load_models_from_config() -> dict:
+    def load_fixtures_from_config() -> dict:
         with open(
             os.path.join(
                 apps.get_app_config('blog').path,
@@ -74,15 +68,15 @@ class Command(BaseCommand):
         ) as config:
             try:
                 config = yaml.safe_load(config)
-                load_models = {}
+                load_fixtures = {}
                 base_dir = config['fixtures']['base_dir']
-                models = config['fixtures'].get('load', {})
-                for model in models.values():
-                    module = importlib.import_module(f"{base_dir}.{model['module']}")
-                    load_models[model['class']] = {
-                        'class': getattr(module, model['class']),
-                        'attributes': model.get('attributes', {})
+                fixture_classes = config['fixtures'].get('load', {})
+                for fixture in fixture_classes.values():
+                    module = importlib.import_module(f"{base_dir}.{fixture['module']}")
+                    load_fixtures[fixture['class']] = {
+                        'class': getattr(module, fixture['class']),
+                        'attributes': fixture.get('attributes', {})
                     }
             except (yaml.MarkedYAMLError, KeyError, AttributeError) as exc:
                 raise CommandError('Configuration file error: ' + exc)
-        return load_models
+        return load_fixtures

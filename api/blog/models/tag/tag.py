@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
 from blog.models.base_model import BaseModel
@@ -15,3 +16,8 @@ class Tag(BaseModel):
 
     class Meta:
         db_table = 'blg_tag'
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = slugify(self.name)
+        super(Tag, self).save(*args, **kwargs)

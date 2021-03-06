@@ -5,5 +5,9 @@ fixtures:
       module: load_1_ability
       class: LoadAbility
       attributes:
-        catalog: False
-        quantity: 3
+        quantity: 100
+    Tag:
+      module: load_2_tag
+      class: LoadTag
+      attributes:
+        quantity: 20
