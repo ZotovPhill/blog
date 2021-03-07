@@ -18,13 +18,19 @@ class Blog(BaseModel):
     slug = models.SlugField(max_length=255, default=slugify(title), unique=True)
     is_private = models.BooleanField(default=False, serialize=False)
     password = models.CharField(max_length=128, null=True, serialize=False)
-    last_modified = models.DateTimeField()
-    last_access = models.DateTimeField()
+    last_modified = models.DateTimeField(auto_now=timezone.now())
+    last_access = models.DateTimeField(auto_now=timezone.now())
 
     _password = None
 
     class Meta:
         db_table = 'blg_blog'
+
+    def set_initial_password(self, raw_password):
+        password_validation.validate_password(raw_password)
+        self.password = make_password(raw_password)
+        self._password = raw_password
+        return self
 
     def set_password(self, raw_password):
         if (timezone.now() - self.last_modified).days < 1:
@@ -46,10 +52,11 @@ class Blog(BaseModel):
         return valid
 
     def save(self, *args, **kwargs):
-        super(Blog, self).save(*args, **kwargs)
         if self._password is not None:
             self.check_password(raw_password=self._password)
             self._password = None
+        self.last_modified = timezone.now()
+        super(Blog, self).save(*args, **kwargs)
 
 
 @receiver(pre_save, sender=Blog)

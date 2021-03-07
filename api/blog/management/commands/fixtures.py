@@ -50,10 +50,11 @@ class Command(BaseCommand):
             obj = fixture()
             if settings.ENVIRONMENT not in obj.env_group():
                 return
-            obj.load(attrs.get('quantity', None), attrs.get('catalog', False))
+            obj.load(attrs.get('quantity', None), bool(attrs.get('catalog', False)))
             self.successful_load += 1
         except Exception as e:
             self.stderr.write(f"Error processing {fixture.__name__} fixture: \n {e}")
+            sys.exit()
         self.stdout.write(self.style.SUCCESS(f"{fixture.__name__} fixtures loaded successfully"))
 
     @staticmethod

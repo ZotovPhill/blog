@@ -1,13 +1,24 @@
 fixtures:
   base_dir: blog.fixtures
   load:
-    Role:
-      module: load_1_ability
-      class: LoadAbility
-      attributes:
-        quantity: 100
     Tag:
-      module: load_2_tag
+      module: load_1_tag
       class: LoadTag
       attributes:
         quantity: 20
+    Blog:
+      module: load_2_blog
+      class: LoadBlog
+      attributes:
+        quantity: 20
+    Role:
+      module: load_3_role
+      class: LoadRole
+      attributes:
+        catalog: true
+    Ability:
+      module: load_4_ability
+      class: LoadAbility
+      attributes:
+        catalog: true
+
