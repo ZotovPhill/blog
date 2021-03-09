@@ -10,7 +10,7 @@ from blog.models import Role, Blog
 
 
 class LoadRole(AbstractFixtureLoader):
-    def load(self, quantity: Union[int, None] = None, is_catalog: bool = False) -> None:
+    def load(self, quantity: Union[int, None]) -> None:
         with open(os.path.join(self.CATALOG_FOLDER, 'roles.csv'), 'r') as catalog:
             roles = csv.reader(catalog, delimiter=',')
             for role in roles:

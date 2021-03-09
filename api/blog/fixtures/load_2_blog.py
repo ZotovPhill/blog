@@ -9,7 +9,7 @@ from blog.models import Blog
 class LoadBlog(AbstractFixtureLoader):
     INITIAL_PASSWORD = 'ZxCqWe135'
 
-    def load(self, quantity: Union[int, None] = None, is_catalog: bool = False) -> None:
+    def load(self, quantity: Union[int, None]) -> None:
         blog_list = []
         counter = 0
         for _ in range(quantity):

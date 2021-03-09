@@ -18,10 +18,6 @@ class Command(BaseCommand):
 
     successful_load = 0
 
-    def add_arguments(self, parser):
-        # parser.add_argument('-d', '--drop', nargs='*')
-        pass
-
     def handle(self, *args, **options):
         question = input(self.style.HTTP_NOT_MODIFIED(textwrap.fill(
             "This command will drop all your data and generate new "
@@ -50,7 +46,7 @@ class Command(BaseCommand):
             obj = fixture()
             if settings.ENVIRONMENT not in obj.env_group():
                 return
-            obj.load(attrs.get('quantity', None), bool(attrs.get('catalog', False)))
+            obj.load(attrs.get('quantity', None))
             self.successful_load += 1
         except Exception as e:
             self.stderr.write(f"Error processing {fixture.__name__} fixture: \n {e}")

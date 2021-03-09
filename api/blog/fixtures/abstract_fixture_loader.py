@@ -14,7 +14,7 @@ class AbstractFixtureLoader(metaclass=ABCMeta):
         self.fake = faker.Faker()
 
     @abstractmethod
-    def load(self, quantity: Union[int, None] = None, is_catalog: bool = False) -> None:
+    def load(self, quantity: Union[int, None]) -> None:
         pass
 
     @abstractmethod

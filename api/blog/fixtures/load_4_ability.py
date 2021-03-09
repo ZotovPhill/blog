@@ -1,5 +1,6 @@
 import csv
 import os
+from typing import Union
 
 from blog.fixtures.abstract_fixture_loader import AbstractFixtureLoader
 from blog.models import Role
@@ -7,7 +8,7 @@ from blog.models.acl.ability import Ability
 
 
 class LoadAbility(AbstractFixtureLoader):
-    def load(self, quantity: int = None, is_catalog: bool = False) -> None:
+    def load(self, quantity: Union[int, None]) -> None:
         with open(os.path.join(self.CATALOG_FOLDER, 'abilities.csv'), 'r') as catalog:
             abilities = csv.reader(catalog, delimiter=',')
             for ability in abilities:

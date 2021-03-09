@@ -7,7 +7,7 @@ from blog.models import Tag
 
 
 class LoadTag(AbstractFixtureLoader):
-    def load(self, quantity: Union[int, None] = None, is_catalog: bool = False) -> None:
+    def load(self, quantity: Union[int, None]) -> None:
         tags_list = []
         counter = 0
         for _ in range(quantity):

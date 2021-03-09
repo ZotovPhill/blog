@@ -21,4 +21,19 @@ fixtures:
       class: LoadAbility
       attributes:
         catalog: true
+    User:
+      module: load_5_user
+      class: LoadUser
+      attributes:
+        quantity: 20
+    File:
+      module: load_6_file
+      class: LoadFile
+      attributes:
+        quantity: 20
+    Post:
+      module: load_7_post
+      class: LoadPost
+      attributes:
+        quantity: 200
 
