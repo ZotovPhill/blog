@@ -11,8 +11,6 @@ import uuid
 
 class Migration(migrations.Migration):
 
-    replaces = [('blog', '0001_initial'), ('blog', '0002_auto_20210225_2141'), ('blog', '0003_auto_20210306_2104'), ('blog', '0004_remove_blog_last_access'), ('blog', '0005_auto_20210307_1053'), ('blog', '0006_auto_20210307_1054'), ('blog', '0007_auto_20210307_1200'), ('blog', '0008_filereference_storage_file'), ('blog', '0009_auto_20210308_1224'), ('blog', '0010_auto_20210308_1327'), ('blog', '0011_auto_20210308_1646'), ('blog', '0012_auto_20210309_2020'), ('blog', '0013_auto_20210309_2105'), ('blog', '0014_auto_20210309_2110'), ('blog', '0015_auto_20210310_1920')]
-
     initial = True
 
     dependencies = [
