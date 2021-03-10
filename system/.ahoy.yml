@@ -53,6 +53,24 @@ commands:
     cmd: "docker exec -it $(docker-compose ps -q web) python manage.py migrate"
     usage: Synchronizes the database state with the current set of models and migrations.
 
+  flush:
+    cmd: "docker exec -it $(docker-compose ps -q web) python manage.py flush --no-input"
+    usage: Synchronizes the database state with the current set of models and migrations.
+
+  fixtures:
+    cmd: "docker exec -it $(docker-compose ps -q web) python manage.py fixtures --traceback --no-interaction $@"
+    usage: Load fixtures
+
   console:
     cmd: "docker exec -it $(docker-compose ps -q web) python manage.py $@"
-    usage: Make migration for current application 'blank_api'
+    usage: Run console for current application 'blog'
+
+  db:rebuild:
+    usage: Unapplying all migration with erasing all data and load fixtures
+    cmd: |
+      echo -e "\033[0;35mUnapply all migrations: blog"
+      ahoy flush
+      echo -e "\n\033[0;35mApply migrations"
+      ahoy migrate
+      echo -e "\n\033[0;35mLoad fixtures"
+      ahoy fixtures

@@ -23,8 +23,10 @@ ipython==7.18.1
 flake8==3.8.4
 drf-yasg==1.20.0
 
-# Request
+# Utils
 requests==2.24.0
+PyYAML==5.3.1
+python-magic==0.4.22
 
 # Messenger
 amqp==2.6.1

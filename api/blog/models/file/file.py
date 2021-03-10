@@ -1,6 +1,7 @@
 import uuid as uuid
 
 from django.db import models
+
 from blog.models.base_model import BaseModel
 from blog.models.dbal.file_status import FileStatus
 from blog.models.dbal.file_type import FileType
@@ -17,7 +18,11 @@ class File(BaseModel):
         choices=FileStatus.choices,
         default=FileStatus.NEW
     )
-    type = models.CharField(max_length=255, choices=FileType.choices, default=FileType.IMAGE)
+    type = models.CharField(
+        max_length=255,
+        choices=FileType.choices,
+        default=FileType.IMAGE
+    )
     visibility = models.CharField(
         max_length=255,
         choices=VisibilityType.choices,

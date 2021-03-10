@@ -1,0 +1,39 @@
+fixtures:
+  base_dir: blog.fixtures
+  load:
+    Tag:
+      module: load_1_tag
+      class: LoadTag
+      attributes:
+        quantity: 20
+    Blog:
+      module: load_2_blog
+      class: LoadBlog
+      attributes:
+        quantity: 20
+    Role:
+      module: load_3_role
+      class: LoadRole
+      attributes:
+        catalog: true
+    Ability:
+      module: load_4_ability
+      class: LoadAbility
+      attributes:
+        catalog: true
+    User:
+      module: load_5_user
+      class: LoadUser
+      attributes:
+        quantity: 20
+    File:
+      module: load_6_file
+      class: LoadFile
+      attributes:
+        quantity: 20
+    Post:
+      module: load_7_post
+      class: LoadPost
+      attributes:
+        quantity: 200
+

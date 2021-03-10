@@ -11,7 +11,7 @@ from blog.models.profile.user import User
 
 
 class Profile(BaseModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     username = models.CharField(
         max_length=255,
         unique=True,
@@ -56,17 +56,5 @@ class Profile(BaseModel):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    """
-    Hooking User model method. Call on User model create.
-    """
-    if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    """
-    Hooking User model method. Call on User model update.
-    """
     instance.profile.save()

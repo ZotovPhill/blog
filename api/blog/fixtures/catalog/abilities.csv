@@ -1,0 +1,42 @@
+admin.view,Доступ к Admin странице блога,administrator|blog-manager|editor|content-creator|columnist-knight-of-the-pen
+admin.password.create,Создать пароль для блога,administrator
+admin.password.edit,Изменить пароль блога,administrator
+admin.password.remove,Убрать пароль с блога,administrator
+admin.user.list,Список пользователей в админке,administrator|blog-manager|editor
+admin.user.view,Просмотр пользователя в админке,administrator|blog-manager|editor
+admin.user.invite,Пригласить пользователя,administrator|blog-manager|editor
+admin.user.remove,Убрать пользователя,administrator|blog-manager|editor
+admin.role.create,Создать роль,administrator
+admin.role.assign,Назначить роль,administrator
+admin.role.remove,Убрать роль,administrator
+admin.role.delete,Удалить роль,administrator
+admin.ability.assign,Добавить ability,administrator|blog-manager|editor
+admin.ability.remove,Убрать ability,administrator|blog-manager|editor
+admin.post.list,Список постов,administrator|blog-manager|editor|content-creator|columnist-knight-of-the-pen
+admin.post.view,Просмотр поста,administrator|blog-manager|editor|content-creator|columnist-knight-of-the-pen
+admin.post.create,Создание поста,administrator|blog-manager|editor|content-creator|columnist-knight-of-the-pen
+admin.post.edit,Редактирование поста,administrator|blog-manager|editor|content-creator|columnist-knight-of-the-pen
+admin.post.delete,Удаление поста,administrator|blog-manager|editor|content-creator|columnist-knight-of-the-pen
+admin.notification.list,Список уведомлениев,administrator|blog-manager|editor
+admin.notification.view,Просмотр уведомления,administrator|blog-manager|editor
+admin.notification.create,Создание уведомления,administrator|blog-manager|editor
+admin.notification.delete,Удаление уведомления,administrator|blog-manager|editor
+admin.notification.target.employee,Создание уведомления для пользователя,administrator|blog-manager|editor|content-creator|columnist-knight-of-the-pen
+admin.notification.target.post,Создание уведомления для поста,administrator|blog-manager|editor|content-creator|columnist-knight-of-the-pen
+admin.notification.target.blog,Создание уведомления для блога,administrator|blog-manager|editor
+blog.list,Список блогов,casual-passer|visitor
+blog.view,Просмотр блога,casual-passer|visitor
+post.list,Список постов,casual-passer|visitor
+post.view,Просмотр поста,casual-passer|visitor
+profile.list,Список профилей,casual-passer|visitor
+profile.view,Просмотр профиля,casual-passer|visitor
+profile.create,Создание профиля,casual-passer|visitor
+profile.edit,Редактирование профиля,casual-passer|visitor
+profile.delete,Удаление профиля,casual-passer|visitor
+chat.comment.list,Список комментариев из чата,casual-passer|visitor
+chat.comment.view,Просмотр комментария из чата,casual-passer|visitor
+chat.comment.create,Создание комментария из чата,casual-passer|visitor
+chat.comment.edit,Редактирование комментария из чата,casual-passer|visitor
+chat.comment.delete,Удаление комментария из чата,casual-passer|visitor
+notification.list,Просмтор списка уведомлений,casual-passer|visitor
+notification.view,Просмтор уведомления,casual-passer|visitor
