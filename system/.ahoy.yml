@@ -58,7 +58,7 @@ commands:
     usage: Synchronizes the database state with the current set of models and migrations.
 
   fixtures:
-    cmd: "docker exec -it $(docker-compose ps -q web) python manage.py fixtures $@"
+    cmd: "docker exec -it $(docker-compose ps -q web) python manage.py fixtures --traceback --no-interaction $@"
     usage: Load fixtures
 
   console:

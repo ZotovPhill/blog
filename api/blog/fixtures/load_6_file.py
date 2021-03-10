@@ -1,4 +1,5 @@
 import os
+import shutil
 from itertools import islice
 import random
 from typing import Union
@@ -10,14 +11,20 @@ from blog.models import FileReference, File, User
 
 
 class LoadFile(AbstractFixtureLoader):
+    PUBLIC_FOLDER = os.path.join(settings.MEDIA_ROOT, 'public')
+
     def load(self, quantity: Union[int, None]) -> None:
-        full_file_name = os.path.join(settings.MEDIA_ROOT, 'public', 'test.jpg')
-        with open(full_file_name, 'rb') as writer:
+        if os.path.exists(self.PUBLIC_FOLDER):
+            shutil.rmtree(self.PUBLIC_FOLDER)
+        os.makedirs(self.PUBLIC_FOLDER)
+        shutil.copyfile(f"{self.CATALOG_FOLDER}/test.jpg", f"{self.PUBLIC_FOLDER}/test.jpg")
+
+        with open(f"{self.PUBLIC_FOLDER}/test.jpg", "rb") as writer:
             storage_file = StorageFile(writer)
 
             file_reference = FileReference.objects.create()
             file_reference.storage_file = storage_file
-            file_reference.fill_file_info(full_file_name)
+            file_reference.fill_file_info(writer.read(1024))
             file_reference.save()
 
         authors = User.objects.all()

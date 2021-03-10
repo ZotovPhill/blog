@@ -1,4 +1,5 @@
 import mimetypes
+from typing import AnyStr
 
 import magic
 from django.conf import settings
@@ -27,8 +28,8 @@ class FileReference(BaseModel):
     class Meta:
         db_table = 'fl_file_reference'
 
-    def fill_file_info(self, path):
-        mime_type = magic.from_file(path, mime=True)
+    def fill_file_info(self, buffer: AnyStr):
+        mime_type = magic.from_buffer(buffer, mime=True)
         extension = mimetypes.guess_extension(mime_type)
         self.mime_type = mime_type
         self.extension = extension

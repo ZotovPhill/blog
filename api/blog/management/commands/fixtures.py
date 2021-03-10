@@ -13,18 +13,28 @@ from django.conf import settings
 
 
 class Command(BaseCommand):
-    help = "Load fixtures of given model (by default load fixtures of all models)"
+    help = "Load fixtures for models described in the fixtures.yaml file."
     requires_migrations_checks = True
 
     successful_load = 0
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--no-interaction",
+            action="store_true",
+            help="Pointing this argument for no disable interactions and "
+                 "console input. WARNING! Automatic consent to the deletion"
+                 " of all data and database and applying fixtures."
+        )
+
     def handle(self, *args, **options):
-        question = input(self.style.HTTP_NOT_MODIFIED(textwrap.fill(
-            "This command will drop all your data and generate new "
-            "fixtures. Would you like to continue? (yes / no): ", 55
-        )))
-        if not re.search('(y|yes)', question.lower()):
-            sys.exit()
+        if not options['no_interaction']:
+            question = input(self.style.HTTP_NOT_MODIFIED(textwrap.fill(
+                "This command will drop all your data and generate new "
+                "fixtures. Would you like to continue? (yes / no): ", 55
+            )))
+            if not re.search('(y|yes)', question.lower()):
+                sys.exit()
 
         # Load models that presented in config file fixtures.yaml
         load_fixtures = self.load_fixtures_from_config()
