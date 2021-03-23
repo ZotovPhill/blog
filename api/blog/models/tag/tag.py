@@ -17,7 +17,11 @@ class Tag(BaseModel):
     class Meta:
         db_table = 'blg_tag'
 
-    def save(self, *args, **kwargs):
+    @property
+    def get_name(self) -> str:
+        return '#' + self.name.title().replace(' ', '')
+
+    def save(self, *args, **kwargs) -> None:
         if not self.id:
             self.slug = slugify(self.name)
         super(Tag, self).save(*args, **kwargs)

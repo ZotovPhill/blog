@@ -19,3 +19,10 @@ class PostContent(BaseModel):
 
     class Meta:
         db_table = 'blg_post_content'
+
+    @property
+    def get_short_description(self) -> str:
+        short_description = self.description
+        if len(short_description) > 120:
+            short_description = short_description[:120 - 3] + '...'
+        return short_description

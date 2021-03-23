@@ -26,7 +26,7 @@ class LoadPost(AbstractFixtureLoader):
             )
             content.save()
 
-            random_files = [files[random.randint(0, files_count-1)] for _ in range(3)]
+            random_files = [files[random.randint(0, files_count - 1)] for _ in range(3)]
             content.file.add(*random_files)
 
             post = Post(
@@ -38,7 +38,7 @@ class LoadPost(AbstractFixtureLoader):
             )
             post.save()
 
-            random_tags = [tags[random.randint(0, tags_count-1)] for _ in range(3)]
+            random_tags = [tags[random.randint(0, tags_count - 1)] for _ in range(3)]
             post.tags.add(*random_tags)
 
     def env_group(self) -> list:

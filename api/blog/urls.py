@@ -1,13 +1,19 @@
 from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView
 )
 from blog import views
+from blog.views import PostViewSet
 
-urlpatterns = [
+router = DefaultRouter()
+router.register(r'posts', PostViewSet, basename='posts_ist')
+
+urlpatterns = router.urls
+
+urlpatterns += [
     path('test/', views.test),
 ]
 
@@ -16,5 +22,3 @@ urlpatterns += [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)

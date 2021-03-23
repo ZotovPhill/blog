@@ -17,6 +17,8 @@ django-rest-auth==0.9.5
 PyJWT==1.7.1
 django-filter==1.1.0
 djangorestframework-filters==0.11.1
+django-parler==2.2
+django-hvad==1.8.0
 
 # Developer Tools
 ipython==7.18.1
